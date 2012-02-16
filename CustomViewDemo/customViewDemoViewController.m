@@ -22,7 +22,10 @@
     
 }
 - (IBAction)newColor:(id)sender {
-    [[self.view.subviews objectAtIndex:(self.view.subviews.count-1)]randomizeBackgroundColor];
+    CustomView *topView = self.view.subviews.lastObject;
+    if ([topView isMemberOfClass:[CustomView class]]) {
+        [[self.view.subviews objectAtIndex:(self.view.subviews.count-1)]randomizeBackgroundColor];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,12 +52,13 @@
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
-    CGPoint touchStart = [touch previousLocationInView:[self.view.subviews objectAtIndex:(self.view.subviews.count-1)]];
-    CGPoint touchEnd = [touch locationInView: [touch view]];
-    CGFloat xDifference = touchEnd.x - touchStart.x;
-    CGFloat yDifference = touchEnd.y - touchStart.y;
-    CGPoint newCenter = CGPointMake(touchStart.x + xDifference, touchStart.y + yDifference);
-    [[self.view.subviews objectAtIndex:(self.view.subviews.count-1)] setCenter:newCenter];
+    if (touch.view == self.view) {
+        CustomView *topView = self.view.subviews.lastObject;
+        if ([topView isMemberOfClass:[CustomView class]]) {
+            CGPoint touchPoint = [touch locationInView:self.view];
+            topView.center = touchPoint;
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated

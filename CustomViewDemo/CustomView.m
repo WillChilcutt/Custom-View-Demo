@@ -45,6 +45,7 @@
     self.userIsTouchingView = YES;
     [self setNeedsDisplay];
     self.alpha = 0.5;
+    [self.superview bringSubviewToFront:self];
 }
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
